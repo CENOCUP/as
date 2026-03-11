@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="pt-pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FIFA PLATINUM v27.1 - SAFE & ULTIMATE</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;600;700&display=swap');
+
+        :root {
+            --bg: #050508;
+            --card-glass: rgba(15, 15, 20, 0.9);
+            --neon: #00ff87;
+            --gold: #ffcc00;
+            --silver: #e0e0e0;
+            --bronze: #cd7f32;
+            --danger: #ff3e3e;
+            --blue: #00d4ff;
+            --text-main: #ffffff;
+            --text-dim: #9494a3;
+        }
+
+        body {
+            background: var(--bg);
+            background-image: radial-gradient(circle at 50% -20%, #1a1a2e 0%, #050508 100%);
+            color: var(--text-main); font-family: 'Rajdhani', sans-serif;
+            margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center;
+        }
+
+        .container { width: 100%; max-width: 1200px; }
+        
+        header { text-align: center; padding: 40px 0; cursor: pointer; }
+        header h1 { font-family: 'Orbitron', sans-serif; font-size: 2.5rem; letter-spacing: 5px; margin: 0; }
+        header h1 span { color: var(--neon); text-shadow: 0 0 15px rgba(0,255,135,0.4); }
+
+        /* TABS */
+        .tabs { display: flex; gap: 8px; justify-content: center; margin-bottom: 30px; flex-wrap: wrap; }
+        .tab-btn {
+            background: rgba(255,255,255,0.03); color: var(--text-dim);
+            padding: 12px 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08);
+            cursor: pointer; font-family: 'Orbitron', sans-serif; font-size: 0.7rem; transition: 0.3s;
+        }
+        .tab-btn.active { background: var(--neon); color: #000; box-shadow: 0 0 15px var(--neon); border-color: var(--neon); }
+
+        /* RECORDS GRID */
+        .records-grid { 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+            gap: 15px; margin-bottom: 30px; 
+        }
+        .record-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
+            border-radius: 15px; padding: 20px; border-left: 4px solid var(--blue);
+            backdrop-filter: blur(10px);
+        }
+        .record-card i { font-family: 'Orbitron'; font-size: 0.6rem; color: var(--text-dim); text-transform: uppercase; display: block; }
+        .record-card b { font-size: 1.5rem; display: block; margin: 5px 0; }
+        .record-card span { font-size: 0.9rem; color: var(--neon); font-weight: 700; }
+
+        /* PODIUM */
+        .season-block { background: var(--card-glass); border-radius: 25px; padding: 25px; margin-bottom: 30px; border: 1px solid rgba(255,255,255,0.05); }
+        .season-title { font-family: 'Orbitron'; color: var(--neon); margin-bottom: 20px; font-size: 1rem; border-bottom: 1px solid rgba(0,255,135,0.2); padding-bottom: 10px; }
+        
+        .podium-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
+        .p-card { 
+            background: rgba(255,255,255,0.02); border-radius: 20px; padding: 20px; text-align: center;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .p-card img { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; margin-bottom: 10px; border: 3px solid #333; padding: 2px; }
+        
+        .c-1 { border-top: 4px solid var(--gold); background: rgba(255,204,0,0.05); } 
+        .c-1 img { border-color: var(--gold); }
+        .c-last { border-top: 4px solid var(--danger); background: rgba(255,62,62,0.05); }
+        .c-last img { border-color: var(--danger); }
+
+        /* TABLE */
+        .table-wrapper { background: var(--card-glass); border-radius: 20px; padding: 15px; border: 1px solid rgba(255,255,255,0.05); overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; min-width: 1000px; }
+        th { text-align: center; padding: 15px; color: var(--text-dim); font-size: 0.7rem; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.1); font-family: 'Orbitron'; }
+        td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.03); }
+
+        .player-cell { display: flex; align-items: center; gap: 12px; text-align: left; }
+        .club-img-small { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; }
+
+        /* ADMIN */
+        #admin { display: none; background: #0a0a0c; padding: 25px; border-radius: 25px; margin-bottom: 30px; border: 2px solid var(--neon); box-shadow: 0 0 30px rgba(0,255,135,0.2); }
+        .edit-row { display: flex; gap: 8px; margin-bottom: 8px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 12px; align-items: center; }
+        input, select { background: #000; border: 1px solid #333; color: #fff; padding: 10px; border-radius: 8px; font-family: 'Rajdhani'; }
+        .btn-action { padding: 12px; border-radius: 10px; border: none; cursor: pointer; font-family: 'Orbitron'; font-size: 0.7rem; font-weight: 700; transition: 0.2s; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header onclick="openAdmin()">
+        <h1>FIFA <span>PLATINUM</span></h1>
+        <div style="font-family: 'Orbitron'; font-size: 0.6rem; color: var(--text-dim); letter-spacing: 5px;">ESTATÍSTICAS & BACKUP SEGURO</div>
+    </header>
+
+    <div id="admin">
+        <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2 style="color:var(--neon); margin:0; font-family:'Orbitron'">ADMIN DASHBOARD</h2>
+            <div style="display:flex; gap:10px;">
+                <button class="btn-action" onclick="exportDB()" style="background:#222; color:#fff">💾 EXPORTAR JSON</button>
+                <button class="btn-action" onclick="importDB()" style="background:#222; color:#fff">📂 IMPORTAR JSON</button>
+            </div>
+        </div>
+        
+        <select id="admin-selector" onchange="renderEditor()" style="width:100%; margin-bottom:20px;"></select>
+        <div id="editor-container"></div>
+        
+        <div style="display:flex; gap:10px; margin-top:20px;">
+            <button class="btn-action" onclick="addNewPlayer()" style="background:transparent; border:1px solid var(--neon); color:var(--neon)">+ NOVO TÉCNICO</button>
+            <button class="btn-action" onclick="saveAll()" style="flex:1; background:var(--neon); color:#000">GUARDAR TUDO NO BROWSER</button>
+        </div>
+        <button class="btn-action" onclick="closeSeason()" style="width:100%; margin-top:10px; background:var(--danger); color:#fff">ENCERRAR TEMPORADA E LIMPAR TABELA</button>
+    </div>
+
+    <div class="tabs">
+        <button id="t-tab" class="tab-btn active" onclick="switchTab('tabela')">Temporada</button>
+        <button id="r-tab" class="tab-btn" onclick="switchTab('ranking')">Ranking Geral</button>
+        <button id="g-tab" class="tab-btn" onclick="switchTab('galeria')">Hall da Fama</button>
+        <button id="i-tab" class="tab-btn" onclick="switchTab('insights')">Análise</button>
+    </div>
+
+    <div id="view-tabela">
+        <select id="season-selector" onchange="changeView(this.value)" style="width:100%; margin-bottom:20px; font-weight:bold;"></select>
+        <div class="table-wrapper"><table id="table-main"></table></div>
+    </div>
+
+    <div id="view-ranking" style="display:none">
+        <div class="table-wrapper"><table id="table-ranking"></table></div>
+    </div>
+
+    <div id="view-galeria" style="display:none; flex-direction: column;"></div>
+
+    <div id="view-insights" style="display:none">
+        <div class="table-wrapper" id="insights-content"></div>
+    </div>
+</div>
+
+<script>
+    const STORAGE_KEY = 'fifa_platinum_v27_1';
+    let db = JSON.parse(localStorage.getItem(STORAGE_KEY)) || { atual: [], historico: [] };
+    let currentMode = 'atual';
+
+    function openAdmin() { if(prompt("Senha Admin:") === '123') document.getElementById('admin').style.display='block'; }
+
+    function switchTab(mode) {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        ['view-tabela', 'view-ranking', 'view-galeria', 'view-insights'].forEach(v => document.getElementById(v).style.display = 'none');
+        document.getElementById('view-' + mode).style.display = (mode === 'galeria') ? 'flex' : 'block';
+        document.getElementById(mode.charAt(0)+'-tab').classList.add('active');
+        if(mode === 'tabela') renderTable();
+        if(mode === 'ranking') renderRankingGeral();
+        if(mode === 'galeria') renderGallery();
+        if(mode === 'insights') renderInsights();
+    }
+
+    function calcAPR(v, e, d) { 
+        let t = (v + e + (d||0)) * 3; 
+        return t > 0 ? (((v * 3) + e) / t * 100).toFixed(1) : "0.0"; 
+    }
+
+    function renderTable() {
+        const selector = document.getElementById('season-selector');
+        selector.innerHTML = '<option value="atual">🏆 TEMPORADA ATIVA (EDITÁVEL)</option>';
+        db.historico.forEach((h, i) => selector.innerHTML += `<option value="${i}">📂 ${h.nome}</option>`);
+
+        let list = currentMode === 'atual' ? [...db.atual] : [...db.historico[currentMode].dados];
+        list.sort((a,b) => ((b.v*3)+b.e) - ((a.v*3)+a.e) || (b.gp-b.gc) - (a.gp-a.gc));
+
+        const table = document.getElementById('table-main');
+        table.innerHTML = `<thead><tr><th>POS</th><th style="text-align:left">TÉCNICO</th><th>J</th><th>PTS</th><th>APR%</th><th>V</th><th>E</th><th>D</th><th>GP</th><th>GS</th><th>FORÇA</th></tr></thead>
+        <tbody>${list.map((j, i) => `
+            <tr>
+                <td style="font-family:'Orbitron'; font-weight:900; text-align:center">${i+1}º</td>
+                <td class="player-cell">
+                    <img src="${j.foto||''}" class="club-img-small" onerror="this.src='https://cdn-icons-png.flaticon.com/512/166/166120.png'">
+                    <b>${j.tecnico}</b>
+                </td>
+                <td style="text-align:center">${(j.v+j.e+(j.d||0))}</td>
+                <td style="text-align:center; font-weight:900; color:var(--neon);">${(j.v*3)+j.e}</td>
+                <td style="text-align:center; color:var(--blue)">${calcAPR(j.v, j.e, j.d)}%</td>
+                <td style="text-align:center">${j.v}</td><td style="text-align:center">${j.e}</td><td style="text-align:center">${j.d||0}</td>
+                <td style="text-align:center">${j.gp}</td><td style="text-align:center">${j.gc}</td>
+                <td style="text-align:center; color:var(--gold); font-weight:700;">${((j.gp*3.5)-(j.gc*2.5)).toFixed(1)}</td>
+            </tr>`).join('')}</tbody>`;
+    }
+
+    function renderRankingGeral() {
+        let stats = {};
+        const proc = (lista) => lista.forEach(j => {
+            if(!stats[j.tecnico]) stats[j.tecnico] = { t:j.tecnico, p:0, v:0, e:0, d:0, gp:0, gc:0, pts:0, f:0 };
+            let s = stats[j.tecnico]; s.p++; s.v+=j.v; s.e+=j.e; s.d+=(j.d||0); s.gp+=j.gp; s.gc+=j.gc; s.pts+=((j.v*3)+j.e);
+            s.f += ((j.gp*3.5)-(j.gc*2.5));
+        });
+        db.historico.forEach(h => proc(h.dados)); proc(db.atual);
+        let sorted = Object.values(stats).sort((a,b) => b.pts - a.pts);
+
+        document.getElementById('table-ranking').innerHTML = `<thead><tr><th>RANK</th><th style="text-align:left">TÉCNICO</th><th>PAR</th><th>J</th><th>PTS</th><th>APR%</th><th>V</th><th>GP</th><th>GS</th><th>FORÇA TOTAL</th></tr></thead>
+        <tbody>${sorted.map((j, i) => `<tr><td style="text-align:center">${i+1}º</td><td style="text-align:left"><b>${j.t}</b></td><td style="text-align:center">${j.p}</td><td style="text-align:center">${j.v+j.e+j.d}</td><td style="text-align:center; color:var(--neon); font-weight:900">${j.pts}</td><td style="text-align:center">${calcAPR(j.v, j.e, j.d)}%</td><td style="text-align:center">${j.v}</td><td style="text-align:center">${j.gp}</td><td style="text-align:center">${j.gc}</td><td style="text-align:center">${j.f.toFixed(1)}</td></tr>`).join('')}</tbody>`;
+    }
+
+    function renderGallery() {
+        const gal = document.getElementById('view-galeria');
+        if(!db.historico.length) { gal.innerHTML = "<p style='text-align:center; padding:40px;'>Hall da Fama vazio. Encerre uma temporada para começar!</p>"; return; }
+
+        let sGerais = {};
+        db.historico.forEach(h => h.dados.forEach(j => {
+            if(!sGerais[j.tecnico]) sGerais[j.tecnico] = { t:j.tecnico, v:0, e:0, d:0, gp:0, gc:0 };
+            let s = sGerais[j.tecnico]; s.v+=j.v; s.e+=j.e; s.d+=(j.d||0); s.gp+=j.gp; s.gc+=j.gc;
+        }));
+
+        const lg = Object.values(sGerais);
+        const topV = [...lg].sort((a,b) => b.v - a.v)[0];
+        const topE = [...lg].sort((a,b) => b.e - a.e)[0];
+        const topA = [...lg].sort((a,b) => b.gp - a.gp)[0];
+        const bestD = [...lg].sort((a,b) => (a.gc/((a.v+a.e+a.d)||1)) - (b.gc/((b.v+b.e+b.d)||1)))[0];
+
+        let html = `<div class="records-grid">
+            <div class="record-card"><i>🏆 MAIS VITÓRIAS</i><b>${topV.t}</b><span>${topV.v} Vitórias</span></div>
+            <div class="record-card" style="border-left-color:var(--neon)"><i>🤝 REI DO EMPATE</i><b>${topE.t}</b><span>${topE.e} Empates</span></div>
+            <div class="record-card" style="border-left-color:var(--gold)"><i>⚽ MELHOR ATAQUE</i><b>${topA.t}</b><span>${topA.gp} Gols</span></div>
+            <div class="record-card" style="border-left-color:var(--blue)"><i>🛡️ MELHOR DEFESA</i><b>${bestD.t}</b><span>${(bestD.gc/((bestD.v+bestD.e+bestD.d)||1)).toFixed(1)} Méd/J</span></div>
+        </div>`;
+
+        html += db.historico.slice().reverse().map(h => {
+            const last = h.dados[h.dados.length - 1];
+            return `<div class="season-block">
+                <div class="season-title">ÉPOCA: ${h.nome.toUpperCase()}</div>
+                <div class="podium-grid">
+                    <div class="p-card c-1"><div style="font-size:0.6rem; font-family:'Orbitron'; color:var(--gold)">🥇 CAMPEÃO</div><img src="${h.dados[0].foto||''}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/166/166120.png'"><b>${h.dados[0].tecnico}</b></div>
+                    <div class="p-card"><div style="font-size:0.6rem; font-family:'Orbitron'">🥈 VICE</div><img src="${h.dados[1]?h.dados[1].foto:''}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/166/166120.png'"><b>${h.dados[1]?h.dados[1].tecnico:'-'}</b></div>
+                    <div class="p-card"><div style="font-size:0.6rem; font-family:'Orbitron'">🥉 3º LUGAR</div><img src="${h.dados[2]?h.dados[2].foto:''}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/166/166120.png'"><b>${h.dados[2]?h.dados[2].tecnico:'-'}</b></div>
+                    <div class="p-card c-last"><div style="font-size:0.6rem; font-family:'Orbitron'; color:var(--danger)">💩 LANTERNA</div><img src="${last.foto||''}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/166/166120.png'"><b>${last.tecnico}</b></div>
+                </div>
+            </div>`;
+        }).join('');
+        gal.innerHTML = html;
+    }
+
+    function renderInsights() {
+        let totalGols = 0, totalJogos = 0;
+        db.historico.forEach(h => h.dados.forEach(j => { totalGols += j.gp; totalJogos += (j.v+j.e+j.d); }));
+        db.atual.forEach(j => { totalGols += j.gp; totalJogos += (j.v+j.e+j.d); });
+        document.getElementById('insights-content').innerHTML = `
+            <h2 style="font-family:'Orbitron'; color:var(--neon)">ESTATÍSTICAS GLOBAIS</h2>
+            <div style="font-size:1.2rem; line-height:2">
+                <p>Golos totais na história do torneio: <b style="color:var(--blue)">${totalGols}</b></p>
+                <p>Média de golos por partida: <b style="color:var(--gold)">${(totalGols / (totalJogos/2 || 1)).toFixed(2)}</b></p>
+                <p>Técnicos registados: <b style="color:var(--neon)">${new Set([...db.atual, ...db.historico.flatMap(h=>h.dados)].map(x=>x.tecnico)).size}</b></p>
+            </div>`;
+    }
+
+    function renderEditor() {
+        const m = document.getElementById('admin-selector').value;
+        const target = m === 'atual' ? db.atual : db.historico[m].dados;
+        document.getElementById('editor-container').innerHTML = target.map((j, i) => `
+        <div class="edit-row">
+            <input style="width:130px" type="text" value="${j.tecnico}" onchange="upd('${m}',${i},'tecnico',this.value)">
+            <input style="flex:1" type="text" placeholder="URL Foto" value="${j.foto||''}" onchange="upd('${m}',${i},'foto',this.value)">
+            V<input type="number" style="width:45px" value="${j.v}" onchange="upd('${m}',${i},'v',parseInt(this.value))">
+            E<input type="number" style="width:45px" value="${j.e}" onchange="upd('${m}',${i},'e',parseInt(this.value))">
+            D<input type="number" style="width:45px" value="${j.d||0}" onchange="upd('${m}',${i},'d',parseInt(this.value))">
+            GP<input type="number" style="width:45px" value="${j.gp}" onchange="upd('${m}',${i},'gp',parseInt(this.value))">
+            GS<input type="number" style="width:45px" value="${j.gc}" onchange="upd('${m}',${i},'gc',parseInt(this.value))">
+            <button onclick="db.atual.splice(${i},1);renderEditor()" style="background:none; border:none; color:var(--danger); cursor:pointer; font-weight:bold; font-size:1.2rem;">×</button>
+        </div>`).join('');
+    }
+
+    function upd(m, idx, f, v) { if(m==='atual') db.atual[idx][f]=v; else db.historico[m].dados[idx][f]=v; }
+    function saveAll() { localStorage.setItem(STORAGE_KEY, JSON.stringify(db)); alert("DADOS GRAVADOS NO BROWSER!"); renderTable(); }
+    function addNewPlayer() { db.atual.push({tecnico: "Novo", foto: "", v:0, e:0, d:0, gp:0, gc:0}); renderEditor(); }
+    function changeView(v) { currentMode = v; renderTable(); }
+    
+    function exportDB() {
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db));
+        const downloadAnchorNode = document.createElement('a');
+        downloadAnchorNode.setAttribute("href", dataStr);
+        downloadAnchorNode.setAttribute("download", "fifa_platinum_backup.json");
+        document.body.appendChild(downloadAnchorNode);
+        downloadAnchorNode.click();
+        downloadAnchorNode.remove();
+    }
+
+    function importDB() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.onchange = e => {
+            const reader = new FileReader();
+            reader.readAsText(e.target.files[0], 'UTF-8');
+            reader.onload = readerEvent => {
+                db = JSON.parse(readerEvent.target.result);
+                saveAll();
+                location.reload();
+            }
+        }
+        input.click();
+    }
+
+    function closeSeason() { 
+        let n = prompt("Dê um nome a esta Temporada (ex: Verão 2026):"); 
+        if(n && db.atual.length > 0) { 
+            db.atual.sort((a,b) => ((b.v*3)+b.e) - ((a.v*3)+a.e) || (b.gp-b.gc) - (a.gp-a.gc));
+            db.historico.push({ nome: n, dados: JSON.parse(JSON.stringify(db.atual)) }); 
+            db.atual = db.atual.map(j => ({...j, v:0, e:0, d:0, gp:0, gc:0})); 
+            saveAll(); location.reload();
+        } 
+    }
+
+    const adminSel = document.getElementById('admin-selector');
+    adminSel.innerHTML = '<option value="atual">Editar Temporada Atual</option>';
+    db.historico.forEach((h, i) => adminSel.innerHTML += `<option value="${i}">Editar: ${h.nome}</option>`);
+
+    renderTable();
+</script>
+</body>
+</html>
